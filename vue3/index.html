@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script src="./packages/reactivity/dist/reactivity.global.js"></script>
+<script>
+    const { reactive, readonly, effect, ref, shallowRef } = VueReactivity
+    const person = {name:'zs',age:20,sex:'女',arr:[1,2,3]}
+    const personProxy = reactive(person)
+    // personProxy.arr.push(222)
+    // personProxy.arr[1] = 44
+    console.log('effect执行前')
+    effect(() => {
+        console.log(personProxy.name)
+    })
+
+    setTimeout(() => {
+        personProxy.name = 'lll'
+    },1000)
+    // console.log(personProxy)
+</script>
+</html>
