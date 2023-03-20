@@ -3,7 +3,7 @@
 **reducer** 函数接收4个参数:
 
 ```js
-array.reduce(function(total, currentValue, currentIndex, arr), initialValue)
+array.reduce(function(total: Record<string, any>, currentValue, currentIndex, arr), initialValue)
 ```
 
 ### [参数](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce#参数)

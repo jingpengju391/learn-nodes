@@ -22,4 +22,26 @@
         })
     }
 
+
+/**
+ * tree转数组，递归模式
+ * @param tree
+ * @returns {*[]}
+ * @constructor
+ */
+function TreeToArray(tree) {
+    // 判断 tree 是否有值，无返回 []
+    if (!Array.isArray(tree) || !tree.length) return []
+    let res = []
+    tree.forEach(v => {
+        // tree的每个元素都 放入到 res里面
+        res.push(v)
+        if (v.children) {
+            // 有children 就把 children数据递归 返回  依次放到 res里面
+            res.push(...TreeToArray(v.children))
+        }
+    })
+    return res
+}
+
 ```
