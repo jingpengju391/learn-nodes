@@ -47,7 +47,7 @@ class Vue{
     }
 }
 // 收集依赖/收集订阅者
-class Dep{
+ class Dep{
     constructor(){
         // 用来存放所有订阅者的信息
         this.subs = []
