@@ -385,81 +385,88 @@ async function doResponse(options){
 		return Promise.allSettled(promises)
 	}
 
-class Scheduler{
-	constructor(options){
-		const { tasks, limit } = options
+class Scheduler {
+  maxLength: number;
+  tasks: (() => Promise<any>)[];
+  counter: number;
+  result: any[];
+  total: number;
 
-		this.maxLength = limit
-		this.tasks = tasks
+  constructor(options: { tasks: (() => Promise<any>)[]; limit: number }) {
+    const { tasks, limit } = options;
 
-		this.counter = 0
+    this.maxLength = limit;
+    this.tasks = tasks;
 
-		this.result = []
+    this.counter = 0;
 
-		this.total = this.tasks.length
-	}
+    this.result = [];
 
+    this.total = this.tasks.length;
+  }
 
-	doResquest(){
+  doRequest(): void {
+    const nums: number = Math.min(this.maxLength, this.tasks.length);
 
-		const nums = Math.min(this.maxLength, this.tasks.length)
+    for (let i = 0; i < nums; i++) {
+      this.maxLength--;
 
-		for(let i = 0; i < nums; i++){
-			this.maxLength--
+      if (this.counter < this.tasks.length) {
+        const task: () => Promise<any> = this.tasks.shift()!;
+        const currentIndex: number = this.total - this.tasks.length - 1;
 
-			if(this.counter < this.tasks.length){
+        this.run(task, currentIndex);
+      }
+    }
+  }
 
-				const task = this.tasks.shift()
-				const currentIndex = this.total - this.tasks.length - 1
+  run(task: () => Promise<any>, currentIndex: number): void {
+    task()
+      .then((res) => {
+        this.result[currentIndex] = res;
+      })
+      .finally(() => {
+        this.maxLength++;
+        this.doRequest();
 
-				this.run(task, currentIndex)
-			}
-		}
-
-	}
-
-	run(task, currentIndex){
-		task().then(res => {
-			this.result[currentIndex] = res
-		}).finally(() => {
-			this.maxLength++
-			this.doResquest()
-
-			if(this.result.length === this.total){
-				console.log('结束， 不准确一会')
-			}
-		})
-	}
+        if (this.result.length === this.total) {
+          console.log('结束， 不准确一会');
+        }
+      });
+  }
 }
 
-class Scheduler{
-	constructor(limit){
-		this.maxLength = limit
-		this.counter = 0
-		this.task = []
-	}
+class Scheduler {
+  maxLength: number;
+  counter: number;
+  tasks: Promise<any>[];
 
-	add(task){
-		this.task.push(task)
-		this.run()
-	}
+  constructor(limit: number) {
+    this.maxLength = limit;
+    this.counter = 0;
+    this.tasks = [];
+  }
 
+  add(task: Promise<any>): void {
+    this.tasks.push(task);
+    this.run();
+  }
 
-	run(){
-		if(!this.tasks.length) return
+  run(): void {
+    if (!this.tasks.length) return;
 
-		if(this.maxLength <= this.counter) return
-		this.counter++
+    if (this.maxLength <= this.counter) return;
+    this.counter++;
 
-		const task = this.task.shift()
+    const task: Promise<any> | undefined = this.tasks.shift();
 
-		task.finally(() => {
-			this.counter--
-			this.run()
-		})
-
-	}
+    task?.finally(() => {
+      this.counter--;
+      this.run();
+    });
+  }
 }
+
 ```
 
 
