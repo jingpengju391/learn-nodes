@@ -4,8 +4,10 @@
 
 1. 提升开发体验
    - 使用 source map 让开发或上线是能够更准确提示错误
+   - 在dev环境中使用 clean-module-source-map
+   - 在pro环境中用 source-map
 2. 提升webpack的打包构建速度
-   - 使用 HotModuleReplacement 让开发式值重新编译打包更新变化了的代码，不变的代码使用缓存，从而更新速度更快
+   - 使用 HotModuleReplacement 让开发式值重新编译打包更新变化了的代码，不变的代码使用缓存，从而更新速度更快( 在webpack中修改js是不会触发热更新，需要再入口文件中配置，vue，react 已经为我们配置好了 )
    - 使用 oneOf 让资源文件被某个loader处理了，就不会继续遍历，打包速度更快
    - 使用 Include/Exclude 排除或只检测某个文件，处理的文件更少，速度更快
    - 使用 Cache 对 eslint 和 babel 处理结果进行缓存，让第二次打包速度更快
