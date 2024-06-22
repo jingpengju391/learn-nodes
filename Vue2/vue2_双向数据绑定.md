@@ -145,7 +145,7 @@ function Compile(el,vm){
                 const value = execResult[1].split('.').reduce((newObj,key) => newObj[key],vm)
                 node.textContent = text.replace(re,value)
                 // 创建watcher的实例
-                new Watcher(vm,execResult[1],(newVal) => {
+                new (vm,execResult[1],(newVal) => {
                     node.textContent = text.replace(re,newVal)
                 })
             }
